@@ -30,13 +30,14 @@ def predict():
     detections = []
     for result in results:
         for box in result.boxes:
-            detections.append({
-                'x1': float(box.xyxy[0][0]),
-                'y1': float(box.xyxy[0][1]),
-                'x2': float(box.xyxy[0][2]),
-                'y2': float(box.xyxy[0][3]),
-                'confidence': float(box.conf[0]),
-                'class': int(box.cls[0])
+            if int(box.cls[0]) == 1:  # Filtrar apenas a classe 1
+                detections.append({
+                    'x1': float(box.xyxy[0][0]),
+                    'y1': float(box.xyxy[0][1]),
+                    'x2': float(box.xyxy[0][2]),
+                    'y2': float(box.xyxy[0][3]),
+                    'confidence': float(box.conf[0]),
+                    'class': int(box.cls[0])
             })
 
     return jsonify(detections)

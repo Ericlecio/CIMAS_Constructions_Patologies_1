@@ -77,7 +77,8 @@
         #preview {
             max-width: 100%;
             max-height: 400px;
-            display: none;
+            display: block;
+            margin: 20px auto; /* Centraliza horizontalmente */
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             animation: fadeIn 0.4s ease-in-out;
@@ -171,6 +172,7 @@
         }
         .modal-content {
             background-color: #fff;
+            color: #2c3e50;
             margin: 15% auto;
             padding: 20px;
             border-radius: 8px;
@@ -284,7 +286,7 @@
         function handleFile(e) {
             const file = e.target.files[0];
             if (file && file.type.startsWith('image/')) {
-                if (file.size > 5 * 1024 * 1024) {
+                if (file.size > 15 * 1024 * 1024) {
                     alert("O arquivo é muito grande. O tamanho máximo permitido é 5MB.");
                     return;
                 }
