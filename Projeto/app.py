@@ -42,7 +42,7 @@ def process_images():
                 if int(box.cls[0]) == 1:  # Detectando vegetação
                     x1, y1, x2, y2 = box.xyxy[0]
                     confidence = box.conf[0]
-                    cv2.rectangle(img, (int(x1), int(y1)), (int(x2), int(y2)), (0, 0, 255), 4)
+                    cv2.rectangle(img, (int(x1), int(y1)), (int(x2), int(y2)), (0, 0, 255), 5)
 
                     detections.append({
                         'image': f'{image_id}.jpg',
@@ -63,12 +63,29 @@ def process_images():
 @app.route('/download', methods=['GET'])
 def download():
     zip_filename = 'imagens_processadas.zip'
+    
+    # Compactar as imagens processadas
     with zipfile.ZipFile(zip_filename, 'w') as zipf:
         for root, dirs, files in os.walk(OUTPUT_DIR):
             for file in files:
                 zipf.write(os.path.join(root, file), file)
 
-    return send_file(zip_filename, as_attachment=True)
+    # Enviar o arquivo compactado
+    response = send_file(zip_filename, as_attachment=True)
+
+    # Após o download, remover a pasta output_images e o arquivo zip
+    try:
+        # Remover todos os arquivos na pasta output_images
+        shutil.rmtree(OUTPUT_DIR)
+        print(f"Pasta {OUTPUT_DIR} removida com sucesso.")
+        
+        # Remover o arquivo zip
+        os.remove(zip_filename)
+        print(f"Arquivo {zip_filename} removido com sucesso.")
+    except Exception as e:
+        print(f"Erro ao tentar remover arquivos: {e}")
+
+    return response
 
 if __name__ == '__main__':
     app.run(debug=True)
